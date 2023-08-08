@@ -38,4 +38,4 @@ jobs:
         # ssh-key: ${{ secrets.DEPLOY_KEY }}
         branch: master
         folder: dist
-        target-folder: dist
+        target-folder: publish
