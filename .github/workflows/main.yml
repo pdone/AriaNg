@@ -42,8 +42,8 @@ jobs:
         folder: dist # 根据编译的项目修改
         target-folder: publish # 目标文件夹 默认 . 即根目录
         
-    - name: Checkout publish folder
-      uses: actions/checkout@v3 # 重新检出代码
+    # - name: Checkout publish folder
+    #   uses: actions/checkout@v3 # 重新检出代码
       
     - name: Setup Pages
       uses: actions/configure-pages@v3 # 配置GitHub Page
