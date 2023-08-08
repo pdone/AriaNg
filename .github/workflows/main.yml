@@ -1,41 +1,59 @@
-name: Build and Push
+name: Build & Push & Deploy
 
-on:
+on: # 监控master的提交 触发工作流
   push:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
     
 permissions:
-  contents: write
+  contents: write # 赋予写权限
   
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest # 编译基于Ubuntu
 
     # strategy:
     #   matrix:
     #     node-version: [14.x]
 
     steps:
-    - uses: actions/checkout@v3
-
+    - uses: actions/checkout@v3 # 检出代码
+    
     - name: Use Node.js 14
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v3 # 安装nodejs
       with:
         node-version: 14
 
     - name: Install dependencies
-      run: npm install
+      run: npm install # 安装依赖项
       
     - name: Build
-      run: gulp clean build-bundle
+      run: gulp clean build-bundle # 启动构建
       
-    - name: Publish to GitHub Pages
-      uses: JamesIves/github-pages-deploy-action@v4
+    - name: Push publish folder
+      uses: JamesIves/github-pages-deploy-action@v4 # 将构建生成的 dist 内容推送到 publish
       with:
         # token: ${{ secrets.GITHUB_TOKEN }}
         # ssh-key: ${{ secrets.DEPLOY_KEY }}
-        branch: master
-        folder: dist
-        target-folder: publish
+        branch: master # 默认值为 gh-pages
+        folder: dist # 根据编译的项目修改
+        target-folder: publish # 目标文件夹 默认 . 即根目录
+        
+    - name: Checkout publish folder
+      uses: actions/checkout@v3 # 重新检出代码
+      
+    - name: Setup Pages
+      uses: actions/configure-pages@v3 # 配置GitHub Page
+      
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v2 # 将 publish 文件夹内容上传
+      with:
+        # Upload entire repository
+        path: 'publish'
+        
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v2 # 启动部署
+
+    
