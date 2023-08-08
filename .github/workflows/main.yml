@@ -8,6 +8,8 @@ on: # 监控master的提交 触发工作流
     
 permissions:
   contents: write # 赋予写权限
+  pages: write
+  id-token: write
   
 jobs:
   build:
